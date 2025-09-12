@@ -1,2 +1,142 @@
-# Leave-Behind-Detector
-A simple project that helps the user by reminding to take their belongings before leaving a specific area.
+# Leave-Behind Detector
+
+A React Native **Expo** app that reminds you to take your belongings before leaving a specific area.
+It uses **device GPS** to monitor when you enter or exit saved locations and sends **local notifications** as a reminder.
+
+---
+
+## ✨ Features
+
+* **Item Reminders**
+
+  * Add, toggle, or delete items you never want to forget (e.g., *umbrella, charger*).
+  * Clear all items with one tap.
+
+* **Saved Places**
+
+  * Add a place by manually entering latitude/longitude or by tapping **Detect Current Location** to auto-fill coordinates.
+  * Specify a radius in meters for each place.
+  * Delete individual locations or clear them all.
+
+* **Geofence & Notifications**
+
+  * Background location tracking with Expo Location.
+  * Detects when you leave a saved area and sends a local notification listing the “always-remember” items.
+  * Works in foreground or background; uses iOS/Android notification APIs.
+
+* **Testing & Simulation**
+
+  * **Test Reminder** button simulates leaving a location to verify notifications without physically moving.
+
+* **User Feedback**
+
+  * Toasts (via `react-native-toast-message`) for success/info messages such as “Item List Empty” or “No Location Present.”
+
+* **Cross-Platform Safe Area**
+
+  * `react-native-safe-area-context` ensures UI looks correct on notched phones (iOS & Android).
+
+---
+
+## 🛠️ Tech Stack
+
+* [React Native](https://reactnative.dev/) (with hooks)
+* [Expo](https://expo.dev/) SDK (Location, Notifications)
+* [react-native-safe-area-context](https://github.com/th3rdwave/react-native-safe-area-context)
+* [react-native-toast-message](https://github.com/calintamas/react-native-toast-message)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/yourusername/leave-behind-detector.git
+cd leave-behind-detector
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Run the app
+
+With Expo Go or a simulator/emulator:
+
+```bash
+npx expo start
+```
+
+Then scan the QR code with your Expo Go app or press the key for iOS/Android simulator.
+
+---
+
+## 📦 Project Setup Commands (recap)
+
+These are the key commands used to bootstrap the project:
+
+```bash
+# Create project
+npx create-expo-app Leave-Behind-Detector
+
+# Install location & notifications
+npx expo install expo-location expo-notifications
+
+# Safe area context
+npm install react-native-safe-area-context
+
+# Toast messages
+npm install react-native-toast-message
+```
+
+If you build a standalone app:
+
+```bash
+npx expo run:android   # or
+npx expo run:ios
+```
+
+---
+
+## ⚙️ How It Works
+
+1. **Start Tracking** – Begins watching GPS position (`Location.watchPositionAsync`).
+2. **Check Position** – On every update, calculates distance to each saved place with the Haversine formula.
+3. **Enter/Exit Detection** –
+
+   * When entering a place, sets `currentPlace` and session start time.
+   * When leaving and if you stayed longer than the minimum session, calls `triggerReminder`.
+4. **Trigger Reminder** – Sends a local notification and shows an in-app alert listing all items marked `always: true`.
+
+---
+
+## 📱 Permissions
+
+* **Location** – Required to detect when you leave a saved area.
+* **Notifications** – Required to deliver local reminders.
+
+The app asks for permissions at runtime.
+
+---
+
+## 🧑‍💻 Development Notes
+
+* Uses `SafeAreaView` with `edges={['top','bottom','left','right']}` for proper layout on devices with notches.
+* All logic (state management, location watching, notifications) is contained in `App.tsx` for simplicity.
+
+---
+
+## 📄 License
+
+MIT License – feel free to fork and modify.
+
+---
+
+### Screenshots (optional)
+
+Add screenshots or GIFs of the UI here once you have them.
