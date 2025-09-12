@@ -137,6 +137,10 @@ MIT License – feel free to fork and modify.
 
 ---
 
-### Screenshots (optional)
+### Screenshots
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 55" src="https://github.com/user-attachments/assets/84256afc-3a09-4c2a-a5a5-dadb4066b773" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 32" src="https://github.com/user-attachments/assets/d7475bb8-7890-4e98-a0a2-448d74fa140d" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 48" src="https://github.com/user-attachments/assets/f598772d-c4b5-4a5d-b406-940b0f6b4eb8" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/f741186e-b43a-4a42-97cb-6e2deb1c62d4" />
 
-Add screenshots or GIFs of the UI here once you have them.
+
