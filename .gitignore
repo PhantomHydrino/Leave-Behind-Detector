@@ -40,4 +40,4 @@ yarn-error.*
 /ios
 /android
 
-.package-lock.json
+./package-lock.json

@@ -1,10 +1,12 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, TextInput, View, FlatList, TouchableOpacity, Button, Alert, PermissionsAndroid, Platform, ToastAndroid } from 'react-native';
+import { Text, TextInput, View, FlatList, TouchableOpacity, Button, Alert, PermissionsAndroid, Platform, ScrollView} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // Types
 interface Item {
   name: string;
@@ -50,6 +52,9 @@ const App = () => {
   const watchId = useRef<Location.LocationSubscription | null>(null);
   const [itemHistory, setItemHistory] = useState<ItemEvent[]>([]);
 
+  const [recoverVisible, setRecoverVisible] = useState(false);
+  const [recoverInput, setRecoverInput] = useState('');
+
   // Notifications setup
   useEffect(() => {
     // Configure how notifications are displayed when the app is foregrounded
@@ -75,6 +80,31 @@ const App = () => {
     })();
   }, []);
   
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const savedHistory = await AsyncStorage.getItem('itemHistory');
+        if (savedHistory) {
+          setItemHistory(JSON.parse(savedHistory));
+        }
+      } catch (err) {
+        console.error("Failed to load itemHistory from storage", err);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await AsyncStorage.setItem('itemHistory', JSON.stringify(itemHistory));
+      } catch (err) {
+        console.error("Failed to save itemHistory to storage", err);
+      }
+    })();
+  }, [itemHistory]);
+
+
   const triggerReminder = async (place: Place, elapsed: number) => {
   const candidates = items.filter(it => it.always).map(it => it.name);
 
@@ -93,7 +123,7 @@ const App = () => {
       trigger: null, // send immediately
     });
 
-    // Show the same text in an in-app alert as well
+    // Show the same text in an in-app alert as well} from 'react-
     Alert.alert(`Leaving ${place.name}`, body);
   };
 
@@ -297,7 +327,8 @@ const App = () => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: '#0f172a' }} edges={['top', 'bottom', 'left', 'right']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0f172a' }} edges={['top', 'bottom', 'left', 'right']}>
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
       <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Leave-Behind Detector (RN)</Text>
 
       {/* Items */}
@@ -393,25 +424,80 @@ const App = () => {
 
       <Button title="Test Reminder (Simulate Leaving)" onPress={simulateLeaving} />
 
+      
+      <Button title="Recover Item" onPress={() => setRecoverVisible(true)} />
+
       <Button
-        title="Recover Item"
+        title="Clear History"
+        color="red"
         onPress={() => {
-          Alert.prompt("Recover Item", "Enter item name", (itemName) => {
-            const suggestions = getRecoverySuggestions(itemName, itemHistory);
-            if (suggestions.length === 0) {
-              Alert.alert("No data", "No history found for this item.");
-            } else {
-              const formatted = suggestions
-                .map(s => `${s.place} (last seen ${Math.floor((Date.now()-s.lastSeen)/60000)} mins ago)`)
-                .join('\n');
-              Alert.alert("Possible Locations", formatted);
-            }
-          });
+          Alert.alert(
+            'Clear History?',
+            'This will erase all saved item events.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'OK', onPress: async () => {
+                  setItemHistory([]);
+                  await AsyncStorage.removeItem('itemHistory');
+                }},
+            ]
+          );
         }}
       />
 
+      {recoverVisible && (
+        <View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <View style={{
+            backgroundColor: '#1e293b',
+            padding: 16,
+            borderRadius: 12,
+            width: '80%'
+          }}>
+            <Text style={{ color: 'white', fontSize: 18, marginBottom: 8 }}>
+              Enter Item Name
+            </Text>
+            <TextInput
+              style={{
+                backgroundColor: '#0f172a',
+                color: 'white',
+                padding: 8,
+                borderRadius: 8,
+                marginBottom: 12
+              }}
+              placeholder="e.g. Wallet"
+              placeholderTextColor="#64748b"
+              value={recoverInput}
+              onChangeText={setRecoverInput}
+            />
+            <Button
+              title="Search"
+              onPress={() => {
+                const suggestions = getRecoverySuggestions(recoverInput, itemHistory);
+                if (suggestions.length === 0) {
+                  Alert.alert("No data", "No history found for this item.");
+                } else {
+                  const formatted = suggestions
+                    .map(s => `${s.place} (last seen ${Math.floor((Date.now()-s.lastSeen)/60000)} mins ago)`)
+                    .join('\n');
+                  Alert.alert("Possible Locations", formatted);
+                }
+                setRecoverVisible(false);
+                setRecoverInput('');
+              }}
+            />
+            <Button title="Cancel" color="red" onPress={() => setRecoverVisible(false)} />
+          </View>
+        </View>
+      )}
 
       <Toast /> 
+      </ScrollView>
     </SafeAreaView>
   );
 };
