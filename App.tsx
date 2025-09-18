@@ -18,6 +18,13 @@ interface Place {
   radius: number;
 }
 
+// New type
+interface ItemEvent {
+  name: string;
+  place: string;
+  timestamp: number;
+}
+
 const haversine = (lat1:number, lon1:number, lat2:number, lon2:number) => {
   const R = 6371000;
   const toRad = (a:number) => a * Math.PI / 180;
@@ -41,6 +48,7 @@ const App = () => {
   const [minSession, setMinSession] = useState(30);
 
   const watchId = useRef<Location.LocationSubscription | null>(null);
+  const [itemHistory, setItemHistory] = useState<ItemEvent[]>([]);
 
   // Notifications setup
   useEffect(() => {
@@ -89,6 +97,16 @@ const App = () => {
     Alert.alert(`Leaving ${place.name}`, body);
   };
 
+  const logItemEvents = (placeName: string) => {
+    const events = items.map(it => ({
+      name: it.name,
+      place: placeName,
+      timestamp: Date.now()
+    }));
+    setItemHistory(prev => [...prev, ...events]);
+  };
+
+
   const checkPosition = (lat:number, lng:number) => {
     let found: Place | null = null;
     for (const p of places) {
@@ -103,6 +121,7 @@ const App = () => {
       setCurrentPlace(found);
       setSessionStart(Date.now());
       setStatus('inside');
+      logItemEvents(found.name);
     } else if(!found && currentPlace){
       const elapsed = sessionStart ? Math.floor((Date.now()-sessionStart)/1000) : 0;
       if(elapsed >= minSession){ triggerReminder(currentPlace, elapsed) }
@@ -256,6 +275,27 @@ const App = () => {
     });
   };
 
+  function getRecoverySuggestions(itemName: string, history: ItemEvent[]) {
+    const now = Date.now();
+    const candidatePlaces: { [place: string]: { score: number, lastSeen: number } } = {};
+
+    history
+        .filter(ev => ev.name === itemName)
+        .forEach(ev => {
+          const recency = 1 / Math.max(1, (now - ev.timestamp) / (1000 * 60)); // weight by minutes ago
+          const freq = history.filter(h => h.name === itemName && h.place === ev.place).length;
+          const score = (recency * 0.6) + (freq * 0.4);
+          if (!candidatePlaces[ev.place] || score > candidatePlaces[ev.place].score) {
+            candidatePlaces[ev.place] = { score, lastSeen: ev.timestamp };
+          }
+        });
+
+      return Object.entries(candidatePlaces)
+        .sort((a, b) => b[1].score - a[1].score)
+        .map(([place, data]) => ({ place, ...data }));
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: '#0f172a' }} edges={['top', 'bottom', 'left', 'right']}>
       <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Leave-Behind Detector (RN)</Text>
@@ -352,6 +392,25 @@ const App = () => {
       </View>
 
       <Button title="Test Reminder (Simulate Leaving)" onPress={simulateLeaving} />
+
+      <Button
+        title="Recover Item"
+        onPress={() => {
+          Alert.prompt("Recover Item", "Enter item name", (itemName) => {
+            const suggestions = getRecoverySuggestions(itemName, itemHistory);
+            if (suggestions.length === 0) {
+              Alert.alert("No data", "No history found for this item.");
+            } else {
+              const formatted = suggestions
+                .map(s => `${s.place} (last seen ${Math.floor((Date.now()-s.lastSeen)/60000)} mins ago)`)
+                .join('\n');
+              Alert.alert("Possible Locations", formatted);
+            }
+          });
+        }}
+      />
+
+
       <Toast /> 
     </SafeAreaView>
   );
