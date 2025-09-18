@@ -12,6 +12,10 @@ It uses **device GPS** to monitor when you enter or exit saved locations and sen
   * Add, toggle, or delete items you never want to forget (e.g., *umbrella, charger*).
   * Clear all items with one tap.
 
+* **Recover Items**
+
+  * Enter the forgotten item's name, and it will display the last locations where it was tracked.
+
 * **Saved Places**
 
   * Add a place by manually entering latitude/longitude or by tapping **Detect Current Location** to auto-fill coordinates.
