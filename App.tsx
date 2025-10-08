@@ -6,6 +6,8 @@ import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapScreen from './Components/map-screen/MapScreen';
+
 
 // Types
 interface Item {
@@ -13,7 +15,7 @@ interface Item {
   always: boolean;
 }
 
-interface Place {
+export interface Place {
   name: string;
   lat: number;
   lng: number;
@@ -21,9 +23,11 @@ interface Place {
 }
 
 // New type
-interface ItemEvent {
+export interface ItemEvent {
   name: string;
   place: string;
+  lat: number;
+  lng: number;
   timestamp: number;
 }
 
@@ -54,6 +58,8 @@ const App = () => {
 
   const [recoverVisible, setRecoverVisible] = useState(false);
   const [recoverInput, setRecoverInput] = useState('');
+
+  const [mapVisible, setMapVisible] = useState(false);
 
   // Notifications setup
   useEffect(() => {
@@ -128,12 +134,17 @@ const App = () => {
   };
 
   const logItemEvents = (placeName: string) => {
-    const events = items.map(it => ({
-      name: it.name,
-      place: placeName,
-      timestamp: Date.now()
-    }));
-    setItemHistory(prev => [...prev, ...events]);
+    const place = places.find(p => p.name === placeName);
+  if (!place) return;
+
+  const events = items.map(it => ({
+    name: it.name,
+    place: place.name,
+    lat: place.lat,   // 👈 add coords
+    lng: place.lng,   // 👈 add coords
+    timestamp: Date.now()
+  }));
+  setItemHistory(prev => [...prev, ...events]);
   };
 
 
@@ -491,8 +502,14 @@ const App = () => {
                 setRecoverInput('');
               }}
             />
+            <Button title="Show Map" onPress={() => setMapVisible(true)} />
             <Button title="Cancel" color="red" onPress={() => setRecoverVisible(false)} />
           </View>
+        </View>
+      )}
+      {mapVisible && (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+          <MapScreen history={itemHistory} onClose={() => setMapVisible(false)} />
         </View>
       )}
 
