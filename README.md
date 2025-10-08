@@ -1,4 +1,4 @@
-# Leave-Behind Detector
+# LostCause
 
 A React Native **Expo** app that reminds you to take your belongings before leaving a specific area.
 It uses **device GPS** to monitor when you enter or exit saved locations and sends **local notifications** as a reminder.
