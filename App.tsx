@@ -340,7 +340,7 @@ const App = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#0f172a' }} edges={['top', 'bottom', 'left', 'right']}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Leave-Behind Detector (RN)</Text>
+      <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>LostCause (RN)</Text>
 
       {/* Items */}
       <View style={{marginTop:16}}>
