@@ -148,9 +148,7 @@ MIT License – feel free to fork and modify.
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/f741186e-b43a-4a42-97cb-6e2deb1c62d4" />
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/7800932f-29df-496e-8da3-6e9d9b6af3a3" />
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/9c42329b-d21f-4df7-bbe9-6806838ece17" />
-<img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/7800932f-29df-496e-8da3-6e9d9b6af3a3" />
-
-
+<img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/b4153354-a7e7-4d7b-bcfb-dffffc12f882" />
 
 
 
