@@ -14,7 +14,7 @@ It uses **device GPS** to monitor when you enter or exit saved locations and sen
 
 * **Recover Items**
 
-  * Enter the forgotten item's name, and it will display the last locations where it was tracked.
+  * Enter the name of the missing item to view its most recent tracked locations, using the 'Recover Items' button.
 
 * **Saved Places**
 
@@ -146,5 +146,7 @@ MIT License – feel free to fork and modify.
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 32" src="https://github.com/user-attachments/assets/d7475bb8-7890-4e98-a0a2-448d74fa140d" />
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 48" src="https://github.com/user-attachments/assets/f598772d-c4b5-4a5d-b406-940b0f6b4eb8" />
 <img width="1080" height="1920" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-12 at 17 21 14" src="https://github.com/user-attachments/assets/f741186e-b43a-4a42-97cb-6e2deb1c62d4" />
-
+![newss1](https://github.com/user-attachments/assets/ad02c6cb-053b-4feb-a4c0-1398e3cac850)
+![newss2](https://github.com/user-attachments/assets/efecf397-9a0d-4d31-ab1b-758f3aaf9f42)
+![newss3](https://github.com/user-attachments/assets/39fa6706-98e8-4da0-b5ba-892abde3b03c)
 
